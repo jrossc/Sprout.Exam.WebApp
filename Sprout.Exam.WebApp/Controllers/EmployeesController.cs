@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Sprout.Exam.Business.DataTransferObjects;
 using Sprout.Exam.Common.Enums;
 using Sprout.Exam.Business;
+using Sprout.Exam.WebApp.Models;
 
 namespace Sprout.Exam.WebApp.Controllers
 {
@@ -119,11 +120,11 @@ namespace Sprout.Exam.WebApp.Controllers
         /// <param name="workedDays"></param>
         /// <returns></returns>
         [HttpPost("{id}/calculate")]
-        public async Task<IActionResult> Calculate(int id, Decimal absentDays, Decimal workedDays)
+        public async Task<IActionResult> Calculate([FromBody]CalculateVM vm)
         {
             //var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
 
-            var result = await Task.FromResult(_dto.Get().FirstOrDefault(m => m.Id == id));
+            var result = await Task.FromResult(_dto.Get().FirstOrDefault(m => m.Id == vm.Id));
             EmployeeFactory ef = null;
 
             if (result == null) return NotFound();
@@ -143,10 +144,10 @@ namespace Sprout.Exam.WebApp.Controllers
             switch(type)
             {
                 case EmployeeType.Regular: 
-                    ef = new RegularEmployeeFactory(absentDays); 
+                    ef = new RegularEmployeeFactory(vm.absentDays); 
                     break;
                 case EmployeeType.Contractual: 
-                    ef = new ContractualEmployeeFactory(workedDays); 
+                    ef = new ContractualEmployeeFactory(vm.workedDays); 
                     break;
                 default:
                    return NotFound("Employee Type not found"); 

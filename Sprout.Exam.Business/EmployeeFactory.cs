@@ -20,8 +20,12 @@ namespace Sprout.Exam.Business
         public RegularEmployee(Decimal numberOfAbsences)
         { 
             _numberOfAbsences = numberOfAbsences;
+            double totaldays = 23 - Convert.ToDouble(_numberOfAbsences);
+            double dayRate = 20000 / totaldays;
+            double taxedAmount = 20000 * 0.12;
 
-            _NetIncome = Convert.ToDecimal(20000 - (20000 / 23 - Convert.ToDouble(_numberOfAbsences)) - (20000 * 0.12));
+            _NetIncome = Convert.ToDecimal(20000 - dayRate - taxedAmount);
+            _NetIncome = Math.Round(_NetIncome, 2);
         }
         public override Decimal NetIncome
         {
@@ -54,6 +58,7 @@ namespace Sprout.Exam.Business
             _numberOfWorkedDays = numberOfWorkedDays;
 
             _NetIncome = 500 * numberOfWorkedDays;
+            _NetIncome = Math.Round(_NetIncome, 2);
         }
         public override Decimal NetIncome
         {
